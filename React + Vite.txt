@@ -1,0 +1,7 @@
+###Создать папку my-app с настроенным dev-окружением:
+npm create vite@latest my-app 
+
+###Наполнить текущую папку ./ настроенным dev-окружением: 
+npm create vite@latest .
+
+npm create vite@latest . --template react-ts   - эта команда создаст новый React-проект с TypeScript в текущей директории
