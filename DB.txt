@@ -1,0 +1,142 @@
+//TODO Визуализация - https://drawsql.app
+
+//TODO Создать БД
+
+// postgres=# CREATE USER max_kosh_jay WITH PASSWORD '123';
+// CREATE ROLE
+// postgres=# ALTER USER max_kosh_jay CREATEDB;
+// ALTER ROLE
+// postgres=# CREATE DATABASE p1w3d1jays OWNER max_kosh_jay;
+// CREATE DATABASE
+// postgres=# DROP DATABASE IF EXISTS p1w3d1jays;
+// ERROR:  database "p1w3d1jays" is being accessed by other users
+// DETAIL:  There are 2 other sessions using the database.
+// postgres=# DROP DATABASE IF EXISTS p1w3d1jays;
+// DROP DATABASE
+// postgres=# CREATE DATABASE p1w3d1jays OWNER max_kosh_jay;
+// CREATE DATABASE
+// postgres=#
+// postgres=#
+// postgres=# GRANT ALL PRIVILEGES ON DATABASE p1w3d1jays TO max_kosh_jay;
+// GRANT
+// postgres=#
+
+//!----------------------------------------------------------------
+//TODO Подключиться к базе в DBeaver
+//!----------------------------------------------------------------
+//TODO Установить библиотеки -  npm install sequelize pg pg-hstore
+//!----------------------------------------------------------------
+//TODO Конфиг подключения, проверили, порадовались
+//!----------------------------------------------------------------
+//TODO пишем функцию для работы с запросами
+//!----------------------------------------------------------------
+//TODO - миграции (работа в файле ./db/migrations)
+//!----------------------------------------------------------------
+//TODO - сиды (работа в файле ./db/seeders.js)
+//!----------------------------------------------------------------
+//TODO - запросы по CRUD (работа в файле ./db/index.js)
+//!----------------------------------------------------------------
+
+
+
+
+
+
+
+
+// Инициализация проекта
+// * инициализируем проект(npm init -y)
+
+// * ----------------------------------------------------------------
+// * создаем гитигнор (npx create-gitignore node)
+
+// * ----------------------------------------------------------------
+// * ставим eslint (npm init @eslint/config)
+
+// * ----------------------------------------------------------------
+// * устанавливаем необходимые библиотеки (npm i sequelize sequelize-cli pg pg-hstore)
+
+// * ----------------------------------------------------------------
+// * создаём файл .sequelizerc, копируем в него следующее:
+/*
+    const path = require('path');
+	 
+    module.exports = {
+        'config': path.resolve('db', 'config', 'database.json'),
+        'models-path': path.resolve('db', 'models'),
+        'seeders-path': path.resolve('db', 'seeders'),
+        'migrations-path': path.resolve('db', 'migrations'),
+    };
+*/
+
+// * ----------------------------------------------------------------
+
+// * проинициализируем (npx sequelize init)
+
+// * ----------------------------------------------------------------
+// * правим конфиги доступа к БД на свои
+
+// "development": {
+// 	"username": "max_kosh_leopard",
+// 	"password": "123",
+// 	"database": "p1w3d1leopards",
+// 	"host": "127.0.0.1",
+// 	"dialect": "postgres"
+//  },
+
+// * ----------------------------------------------------------------
+// * создаем базу данных (npx sequelize db:create)
+
+// * ----------------------------------------------------------------
+
+// ! Создаём и рассматриваем модели и миграции (модель в единственном числе)
+
+// * npx sequelize-cli model:generate --name Student --attributes first_name:string,last_name:string,age:integer
+// * npx sequelize-cli model:generate --name Computer --attributes model:string,owner_id:integer
+
+// * ----------------------------------------------------------------
+//! Выносим команды в скрипты для удобной работы
+// "scripts": {
+//     "test": "echo \"Error: no test specified\" && exit 1",
+//     "reMig": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate",
+//     "undoMig": "npx sequelize db:migrate:undo:all",
+//     "mig": "npx sequelize db:migrate",
+//     "seed": "npx sequelize db:seed:all",
+//     "undoSeed": "npx sequelize db:seed:undo:all",
+//     "createDB": "npx sequelize db:create",
+//     "dropDB": "npx sequelize db:drop"
+//   },
+
+// * ----------------------------------------------------------------
+
+// ! СВЯЗИ: Работаем с моделями
+
+// * компьютеры связаны со студентами так: this.belongsTo(models.Student, { foreignKey: 'owner_id' });
+// * студенты связаны со компьютерами так: this.hasMany(models.Computer, { foreignKey: 'owner_id' });
+
+// * ----------------------------------------------------------------
+// ! Работаем с сидами
+
+//* создаем каркас сида студентов (npx sequelize-cli seed:generate --name StudentsSeed)
+//* создаем каркас сида компкутеров (npx sequelize-cli seed:generate --name ComputersSeed)
+
+//* заполняем данными - см файлы в папке seeders
+//* накатываем сиды (npx sequelize db:seed:all) - накатит все сиды
+
+//? накатить отдельный сид (если нужно) (npx sequelize db:seed --seed 20240304182116-StudentsSeed.js)
+
+//* Выносим сиды в скрипт ("seed": "npx sequelize db:seed:all")
+
+//! -----------CRUD-----CRUD------CRUD-------CRUD--------CRUD----------
+
+//! READ
+//* см crud/read.js
+
+//! CREATE
+//* см crud/create.js
+
+//! UPDATE
+//* см crud/update.js
+
+//! DELETE
+//* см crud/delete.js
