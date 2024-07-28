@@ -4,7 +4,9 @@ https://github.com/Elbrus-Bootcamp/vite-react-ts
 
 
 Коротко:
-npx degit Elbrus-Bootcamp/vite-react-ts my-app
+npx degit Elbrus-Bootcamp/vite-react-ts my-app   - в папке my-app
+
+npx degit Elbrus-Bootcamp/vite-react-ts .   - в текущей папке
 
 cd my-app
 
