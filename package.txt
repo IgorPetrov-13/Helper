@@ -1,0 +1,8 @@
+ "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "dbr": "npx sequelize db:drop && npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all",
+    "dbc": "npx sequelize db:create",
+    "dbm": "npx sequelize db:migrate:undo:all && npx sequelize db:migrate",
+    "dbs": "npx sequelize db:seed:all"
+  },
