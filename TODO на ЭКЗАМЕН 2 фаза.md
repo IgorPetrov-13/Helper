@@ -1,16 +1,16 @@
-1 Создаем в проекте папку server
-2 Инициализируем проект 
+##1 Создаем в проекте папку server
+##2 Инициализируем проект 
 npm init -y
 
-3 Создаем gitignore
+##3 Создаем gitignore
 npx gitignore node
 
-4 Устанавливаем sequelize
+##4 Устанавливаем sequelize
 npm i sequelize pg pg-hstore
 npm i sequelize-cli -D
 
 
-5 создаём файл .sequelizerc, копируем в него следующее:
+##5 создаём файл .sequelizerc, копируем в него следующее:
 ```
     const path = require('path');
 	 
