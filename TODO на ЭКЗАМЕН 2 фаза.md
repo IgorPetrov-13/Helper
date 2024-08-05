@@ -68,20 +68,23 @@ npx sequelize-cli model:generate --name Car --attributes model:string,descriptio
 
 ### 9 СВЯЗИ: Работаем с моделями
 
-машины связаны с пользователями так: this.belongsTo(models.User, { foreignKey: 'userId' });
-пользователи связаны с машинами так: this.hasMany(models.Car, { foreignKey: 'userId' });
+машины связаны с пользователями так: 
+```this.belongsTo(models.User, { foreignKey: 'userId' });```
+пользователи связаны с машинами так: 
+```this.hasMany(models.Car, { foreignKey: 'userId' });```
 
 ### 10 Работаем с сидами
 
-создаем каркас сида пользователей (npx sequelize-cli seed:generate --name UsersSeed)
- создаем каркас сида машин (npx sequelize-cli seed:generate --name CarsSeed)
+создаем каркас сида пользователей 
+```npx sequelize-cli seed:generate --name UsersSeed```
+создаем каркас сида машин 
+```npx sequelize-cli seed:generate --name CarsSeed```
 
-заполняем данными - см файлы в папке seeders
-накатываем сиды (npx sequelize db:seed:all) - накатит все сиды
+заполняем данными
+накатываем сиды  ```npx sequelize db:seed:all``` - накатит все сиды
 
-накатить отдельный сид (если нужно) (npx sequelize db:seed --seed 20240304182116-StudentsSeed.js)
+накатить отдельный сид (если нужно) ```npx sequelize db:seed --seed 20240304182116-StudentsSeed.js```
 
-Выносим сиды в скрипт ("seed": "npx sequelize db:seed:all")
 
 ## Создание REST api Express
 
