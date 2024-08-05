@@ -11,7 +11,8 @@
 ```npx gitignore node```
 
 ### 4 Устанавливаем sequelize
-```npm i sequelize pg pg-hstore
+```
+npm i sequelize pg pg-hstore
 npm i sequelize-cli -D
 ```
 
