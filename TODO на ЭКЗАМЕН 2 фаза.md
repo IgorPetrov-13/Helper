@@ -1,19 +1,19 @@
 CОЗДАНИЕ ПРОЕКТА С НУЛЯ
 
 
-1 Создаем в проекте папку server
-2 Инициализируем проект 
+### 1 Создаем в проекте папку server
+### 2 Инициализируем проект 
 npm init -y
 
-3 Создаем gitignore
+### 3 Создаем gitignore
 npx gitignore node
 
-4 Устанавливаем sequelize
+### 4 Устанавливаем sequelize
 npm i sequelize pg pg-hstore
 npm i sequelize-cli -D
 
 
-5 создаём файл .sequelizerc, копируем в него следующее:
+### 5 создаём файл .sequelizerc, копируем в него следующее:
 ```
     const path = require('path');
 	 
@@ -31,7 +31,7 @@ npm i sequelize-cli -D
 если делаем удаленную ДБ
 https://github.com/IgorPetrov-13/Helper/blob/main/DB%20Remoute.md
 
-6 Настраиваем окружение, если это не удаленная БД
+### 6 Настраиваем окружение, если это не удаленная БД
 
 ```
 {
@@ -46,12 +46,12 @@ https://github.com/IgorPetrov-13/Helper/blob/main/DB%20Remoute.md
 создаем базу данных 
 ```npx sequelize db:create```
 
-7 Создаем модели и миграции (модель в единственном числе)
+### 7 Создаем модели и миграции (модель в единственном числе)
 ```
 npx sequelize-cli model:generate --name User --attributes login:string,email:string,password:string
 npx sequelize-cli model:generate --name Car --attributes model:string,description:string,userId:integer
 ```
-8 Для удобства прописываем быстрые команды в package.json
+### 8 Для удобства прописываем быстрые команды в package.json
 ```
 "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -63,12 +63,12 @@ npx sequelize-cli model:generate --name Car --attributes model:string,descriptio
   },
 ```
 
-9 СВЯЗИ: Работаем с моделями
+### 9 СВЯЗИ: Работаем с моделями
 
 машины связаны с пользователями так: this.belongsTo(models.User, { foreignKey: 'userId' });
 пользователи связаны с машинами так: this.hasMany(models.Car, { foreignKey: 'userId' });
 
-10 Работаем с сидами
+### 10 Работаем с сидами
 
 создаем каркас сида пользователей (npx sequelize-cli seed:generate --name UsersSeed)
  создаем каркас сида машин (npx sequelize-cli seed:generate --name CarsSeed)
@@ -80,6 +80,6 @@ npx sequelize-cli model:generate --name Car --attributes model:string,descriptio
 
 Выносим сиды в скрипт ("seed": "npx sequelize db:seed:all")
 
-# Создание REST api Express
+## Создание REST api Express
 
 https://github.com/IgorPetrov-13/Helper/blob/main/Express%20REST%20api.md
