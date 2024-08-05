@@ -7,19 +7,24 @@
 ```
 npm i bcrypt // хэширование паролей
 npm i express // сам express
-npm i morgan  // логирование запросов
-npm i nodemon // перезапуск сервера после изменений
 npm i cookie-parser // middleware для получения cookie
 npm i pg // поддрежка postgres
 npm i pg-hstore // поддрежка postgres
 npm i sequelize
-npm i sequelize-cli
-
 npm i jsonwebtoken // для работы с jwt токена (авторизация/регистрация)
 npm i dotenv // для использование env
+
+
+Девдепенденсисы:
+
+npm i sequelize-cli -D
+npm i nodemon -D // перезапуск сервера после изменений
+npm i morgan -D // логирование запросов
+
+
 ```
 
-### 2. Создаем базу данных, миграции, сиды
+### 2. Создаем базу данных, миграции, сиды (если не ставили)
 
 ### 3. Создаем файл, в котором будем стартовать наше express приложение
 
@@ -27,16 +32,25 @@ npm i dotenv // для использование env
 
 ```js
 // ./app.js
+require("dotenv").config();
 const express = require("express");
 const app = express(); // Создаем экземпляр приложения
+const PORT = process.env.PORT ?? 3000;
+const serverConfig = require("./config/serverConfig");
 
-app.get("/", (req, res) => {
-  res.send("<h1>Простой route на get запрос </h1>");
-});
+// Импортируем роуты из отдельных файлов
+const apiRoute = require("./routes/api.routes");
 
-app.listen(3000, () => {
-  console.log(`Example app listening on port 3000 }`);
-});
+// Конфигурация
+serverConfig(app);
+
+// Маршрутизация
+app.use("/api", apiRoute);
+
+
+// Прослушивания порта
+app.listen(PORT, () => console.log(`Server started at ${PORT} port`));
+
 ```
 
 Запускаем приложение командой `node app.js`
@@ -55,21 +69,31 @@ app.listen(3000, () => {
 
 Переходим в браузере по адресу `localhost:3000/` или используем thunder/postman для проверки работы.
 
-### 4. Добавляем необходимые `middleware` в `app.js`
+### 4. Добавляем необходимые конфигурации в `app.js`
 
 Подробнее про middleware - https://expressjs.com/ru/guide/using-middleware.html
 
-```js
-// ./app.js
+```
+
+//server/config/serverConfig.js
+
 const express = require("express");
-const app = express();
+const removeHTTPHeader = require("../middleware/removeHTTPHeader");
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
+const path = require("path");
 
-app.use(morgan("dev")); // логирует HTTP запросы
-app.use(cookieParser()); // для чтение cookie
-app.use(express.urlencoded()); // для чтения данных из тела запроса
-app.use(express.json()); // для чтения JSON из тела запроса
+const serverConfig = (app) => {
+  app.use(express.urlencoded({ extended: true })); // для чтения из POST запросов req.body
+  app.use(express.json()); // для чтения json из body
+  app.use(express.static(path.join(__dirname, "public"))); // чтение папки static
+  app.use(removeHTTPHeader); //удаление заголовка
+  app.use(cookieParser()); // чтение кук
+  app.use(morgan("dev")); // Логирование запросов на сервере
+};
 
-//........
+module.exports = serverConfig;
+
 ```
 
 ### 5. Выстраиваем архитектуру проекта
@@ -102,9 +126,17 @@ app/
 
 ```js
 // ./routes/index.api.routes.js
-const indexRoute = require("express").Router();
 
-module.exports = indexRoute;
+const apiRoute = require("express").Router();
+const roadsRoute = require("./api/roads.routes.js")
+const userRoute = require("./api/user.routes.js")
+
+
+apiRoute.use("/roads", roadsRoute);
+apiRoute.use("/user", userRoute);
+
+module.exports = apiRoute;
+
 ```
 
 Импортируем его в наше приложение `app.js` **строго после всех middleware**!
@@ -125,84 +157,85 @@ app.use("/api", indexRoute);
 А здесь доступные методы (API) - https://expressjs.com/ru/4x/api.html#req и https://expressjs.com/ru/4x/api.html#res
 
 ```js
-// ./app/routes/apitodos.routes.js
-const todoRoute = require("express").Router();
-const { Todo } = require("../../db/models");
-const removeHeader = require("../../middleware/removeHeaders");
+//server/routes/api/roads.routes.js
+const roadsRoute = require('express').Router();
+const { Road } = require('../../db/models');
+const verifyAccessToken = require('../../middleware/verifyAccessToken');
 
-todoRoute.get("/:id", removeHeader, async (req, res) => {
+roadsRoute.get('/', async (req, res) => {
   try {
-    const todo = await Todo.findOne({ where: { id: req.params.id } });
-    res.status(201).json({ todo });
+    const roads = await Road.findAll({ order: [['id', 'ASC']] });
+    res.status(200).json({ message: 'success', roads });
   } catch (error) {
-    res.status(500).json({ error, message: "Ошибка" });
+    res.status(500).json(error.message);
   }
 });
 
-todoRoute.get("/", async (req, res) => {
+roadsRoute.get('/:id', async (req, res) => {
   try {
-    const todos = await Todo.findAll();
-    res.status(201).json({ todos });
+    const { id } = req.params;
+    const road = await Road.findOne({ where: { id } });
+    res.status(200).json({ message: 'success', road });
   } catch (error) {
-    res.status(500).json({ error, message: "Ошибка" });
+    res.status(500).json(error.message);
   }
 });
 
-todoRoute.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+roadsRoute.post('/', verifyAccessToken, async (req, res) => {
+  const { title, description, mapLink, length, city, userId } = req.body;
   try {
-    const todo = await Todo.destroy({ where: { id } });
-    res.status(201).json({ todo });
+    if (title && description && mapLink && length && city && userId) {
+      const newRoad = Road.create({
+        title,
+        description,
+        city,
+        length,
+        mapLink,
+        userId,
+      });
+      res.status(201).json({ message: 'success', newRoad });
+    } else {
+      res.status(400).json({ message: 'write correct information' });
+    }
   } catch (error) {
-    res.status(500).json({ error, message: "Ошибка" });
+    res.status(500).json(error.message);
   }
 });
 
-todoRoute.put("/:id", async (req, res) => {
-  const { id } = req.params;
-
+roadsRoute.delete('/:roadId', verifyAccessToken, async (req, res) => {
+  const { roadId } = req.params;
   try {
-    const todo = await Todo.update(req.body, { where: { id } });
-    res.status(201).json({ todo });
+    const deletedRoad = Road.destroy({ where: { id: roadId } });
+    if (deletedRoad === 0) {
+      return res.status(404).json({ message: 'Road not found' });
+    } else {
+      res.status(200).json({ message: 'success' });
+    }
   } catch (error) {
-    res.status(500).json({ error, message: "Ошибка" });
+    res.status(500).json(error.message);
   }
 });
 
-todoRoute.post("/", async (req, res) => {
-  const { title, categoryId, userId } = req.body;
-  if (!title || !categoryId || !userId) {
-    res.status(400).json({ message: "Ошибка, не хватает данных" });
-    return;
-  }
-  if (title.trim() === "" || categoryId.trim() === "" || userId.trim() === "") {
-    res.status(400).json({ message: "Ошибка, одно из полей пустые" });
-    return;
-  }
-
+roadsRoute.put('/:roadId', verifyAccessToken, async (req, res) => {
+  const { roadId } = req.params;
   try {
-    const todo = await Todo.create(req.body);
-    res.status(201).json({ todo });
+    const road = await Road.findOne({ where: { id: roadId } });
+    if (!road) {
+      return res.status(404).json({ message: 'Road not found' });
+    } else {
+      const updateRoad = await Road.update(req.body, { where: { id: roadId } });
+      res.status(200).json({ message: 'success', updateRoad });
+    }
   } catch (error) {
-    res.status(500).json({ error, message: "Ошибка" });
+    res.status(500).json(error.message);
   }
 });
 
-module.exports = todoRoute;
+module.exports = roadsRoute;
+
 ```
 
-И подключаем его в `./app/routes/index.api.routes.js`
-
-```js
-// ./routes/index.api.routes.js
-const indexRoute = require("express").Router();
-
-indexRoute.use("/todos", todoRoute);
-
-module.exports = indexRoute;
-```
-
-Тогда полный адрес для запросов будет вида localhost:3000/api/todos
+Тогда полный адрес для запросов будет вида localhost:3000/api/roads
 
 ### 6. Статика
 
@@ -226,6 +259,11 @@ app.use(express.static(path.join(__dirname, 'public'))) указывает Expre
 
 Теперь, когда вы запускаете сервер и открываете http://localhost:3000 в браузере, Express будет обслуживать статические файлы из директории public. Например, CSS-файл будет доступен по адресу http://localhost:3000/css/styles.css.
 
+Далее - ЛОГА-РЕГА:
+
+
+
+СПРАВОЧНАЯ ИНФОРМАЦИЯ:
 ### 7. Методы HTTP запросов:
 
 #### Основные
