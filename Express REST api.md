@@ -95,6 +95,17 @@ const serverConfig = (app) => {
 module.exports = serverConfig;
 
 ```
+Добавляем мидлвар для удаления HTTP заголовка
+```
+//server/middleware/removeHTTPHeader.js
+const removeHTTPHeader = (req, res, next) => {
+    res.removeHeader('X-Powered-By');
+    next()
+}
+
+module.exports = removeHTTPHeader;
+
+```
 
 ### 5. Выстраиваем архитектуру проекта
 
@@ -150,7 +161,7 @@ module.exports = apiRoute;
 app.use("/api", indexRoute);
 ```
 
-Создаем наши endpoint's, к примеру файл `./app/routes/apitodos.routes.js`
+Создаем наши endpoint's, к примеру файл `./app/routes/roads.routes.js`
 
 Подробнее про объект запросов и ответов сервера тут https://expressjs.com/ru/guide/routing.html
 
