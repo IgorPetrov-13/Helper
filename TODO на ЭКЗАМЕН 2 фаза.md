@@ -10,7 +10,8 @@
 
 ### 4 Устанавливаем sequelize
 ```npm i sequelize pg pg-hstore
-npm i sequelize-cli -D```
+npm i sequelize-cli -D
+```
 
 ### 5 создаём файл .sequelizerc, копируем в него следующее:
 ```
@@ -30,7 +31,7 @@ npm i sequelize-cli -D```
 если делаем удаленную ДБ
 https://github.com/IgorPetrov-13/Helper/blob/main/DB%20Remoute.md
 
-###6 Настраиваем окружение, если это не удаленная БД
+### 6 Настраиваем окружение, если это не удаленная БД
 
 ```
 {
