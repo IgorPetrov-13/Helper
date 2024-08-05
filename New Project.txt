@@ -1,5 +1,0 @@
-Настройка проекта
-
-npm init -y    //инициализируем проект
-npx gitignore node  // создаем файл .gitignor
-npm init @eslint/config@0.4.6 //! строгий style-гайд
