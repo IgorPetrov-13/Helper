@@ -1,4 +1,4 @@
-##Для инициализациии проекта React + TS используем инструкцию 
+## Для инициализациии проекта React + TS используем инструкцию 
 
 https://github.com/Elbrus-Bootcamp/vite-react-ts
 
@@ -14,7 +14,7 @@ npm i
 
 
 
-##Не забываем менять конфиг VITE
+## Не забываем менять конфиг VITE
 
 
 import { defineConfig } from 'vite';
