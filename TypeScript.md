@@ -4,19 +4,19 @@ https://github.com/Elbrus-Bootcamp/vite-react-ts
 
 
 Коротко:
-npx degit Elbrus-Bootcamp/vite-react-ts my-app   - в папке my-app
+```npx degit Elbrus-Bootcamp/vite-react-ts my-app```   - в папке my-app
 
-npx degit Elbrus-Bootcamp/vite-react-ts .   - в текущей папке
+```npx degit Elbrus-Bootcamp/vite-react-ts .```   - в текущей папке
 
-cd my-app
+```cd my-app```
 
-npm i
+```npm i```
 
 
 
 ## Не забываем менять конфиг VITE
 
-
+```
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -33,3 +33,4 @@ export default defineConfig({
   },
  
 })
+```
