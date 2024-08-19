@@ -1,3 +1,7 @@
+## 0. Не забываем устанавливать
+
+```npm i redux react-redux @reduxjs/toolkit```
+
 ## 1. Создаем store используя функцию configureStore из '@reduxjs/toolkit'
 
 ```
