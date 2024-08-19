@@ -17,7 +17,7 @@ client/src/app/providers/store/store.ts
 ```
 client/src/app/providers/store/store.ts
 
-type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = typeof store.dispatch;
 ```
 
@@ -25,7 +25,10 @@ type AppDispatch = typeof store.dispatch;
 ```
 client/src/app/providers/store/store.ts
 
+// Хук селектора для вытаскивания данных из store
 export const useAppSelector = useSelector.withTypes<RootState>();
+
+// Хук диспатча что бы положить данные в store
 export const useAppDispatch = useDispatch.withTypes<AppDispatch>();
 ```
 ## 4. Используем обертку Provider из react-redux для передачи store
@@ -78,7 +81,7 @@ export default roadSlice.reducer;
 #### Что возвращает roadSlice
 *что бы понять, почему мы используем roadSlice.reducer
 
-roadSlice возвращает объект, содержащий следующие свойства:
+roadSlice возвращает объект, который так же содержащий следующие свойства:
 
 ```
 reducer: Это функция редьюсера, которая обрабатывает изменения состояния. Она отвечает за обновление состояния в Redux хранилище на основе действий.
@@ -100,9 +103,58 @@ client/src/entities/road/model/roadSlice.ts
 
 export const loadAllRoads = createAsyncThunk ('load/allRoads',  () => RoadApi.getAllRoads())
 ````
+## 7. Добавляем в extraReducer
 
+```
+client/src/entities/road/model/roadSlice.ts
 
+extraReducers: (builder) => {
+      builder.addCase(loadAllRoads.fulfilled, (state, action)=>{
+        state.roads = action.payload.roads
+      })
+  }
+```
+## 8. Добавляем наш слайс в store
 
+```
+client/src/app/providers/store/store.ts
+
+export const store = configureStore({
+  reducer: {
+    roads: roadSlice.reducer
+  },
+});
+```
+
+## 9. Используем кастомный хук useAppDispatch для загрузки данных с сервера
+
+```
+
+function App(): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    void dispatch(loadAllRoads());
+  }, []);
+
+  return (
+    <Provider store={store}>
+      <Navbar user={user} />
+      <AppRoutes user={user} setUser={setUser} />
+    </Provider>
+  );
+}
+
+export default App;
+```
+
+## 10. Используем кастомный хук useAppSelector для извлечения данных из хранилища
+
+Получаем массив roads для дальнейшего использования в компонентах
+
+```
+const roads = useAppSelector((store) => store.roads.roads);
+```
 
 
 
