@@ -109,9 +109,21 @@ export const loadAllRoads = createAsyncThunk ('load/allRoads',  () => RoadApi.ge
 client/src/entities/road/model/roadSlice.ts
 
 extraReducers: (builder) => {
-      builder.addCase(loadAllRoads.fulfilled, (state, action)=>{
-        state.roads = action.payload.roads
-      })
+      builder.addCase(loadAllRoads.fulfilled, (state, action) => {
+      state.roads = action.payload.roads;
+    });
+    builder.addCase(addRoad.fulfilled, (state, action) => {
+      state.roads = [...state.roads, action.payload.newRoad];
+    });
+    builder.addCase(deleteRoad.fulfilled, (state, action) => {
+      state.roads = state.roads.filter((el) => el.id !== action.meta.arg)
+      return state
+    });
+    builder.addCase(updateRoad.fulfilled, (state, action) => {
+      state.roads = state.roads.map((road) =>
+        road.id === action.payload.updatedRoad.id ? action.payload.updatedRoad : road,
+      );
+    });
   }
 ```
 ## 8. Добавляем наш слайс в store
