@@ -12,7 +12,7 @@ client/src/app/providers/store/store.ts
   });
 ```
 
-## 2. Типизируем кастомные хуки useAppSelector и useAppDispatch
+## 2. Типизируем пользовательские хуки useAppSelector и useAppDispatch
 
 ```
 client/src/app/providers/store/store.ts
@@ -21,7 +21,7 @@ export type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = typeof store.dispatch;
 ```
 
-## 3. Создаем кастомные хуки
+## 3. Создаем пользовательские хуки
 ```
 client/src/app/providers/store/store.ts
 
