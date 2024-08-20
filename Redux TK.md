@@ -57,7 +57,6 @@ export const initialState: TypeInitialState = {
   roads: [],
 };
 
-console.log("createSlice из слайса", createSlice);
 
 
 const roadSlice = createSlice({
@@ -73,7 +72,7 @@ const roadSlice = createSlice({
   },
 });
 
-export default roadSlice.reducer;
+export default roadSlice;
 
 
 ```
@@ -101,7 +100,13 @@ actions: Это объект, содержащий действия, сгене�
 ```
 client/src/entities/road/model/roadSlice.ts
 
-export const loadAllRoads = createAsyncThunk ('load/allRoads',  () => RoadApi.getAllRoads())
+export const loadAllRoads = createAsyncThunk('load/allRoads', () => RoadApi.getAllRoads());
+export const addRoad = createAsyncThunk('add/road', (data: TypeRoad) => RoadApi.createRoad(data));
+export const deleteRoad = createAsyncThunk('delete/road', (id: TypeRoadId) =>
+  RoadApi.deleteRoad(id));
+export const updateRoad = createAsyncThunk('update/road', (newRoad: TypeRoad) =>
+  RoadApi.updateRoad(newRoad),
+);
 ````
 ## 7. Добавляем в extraReducer
 
@@ -138,7 +143,7 @@ export const store = configureStore({
 });
 ```
 
-## 9. Используем кастомный хук useAppDispatch для загрузки данных с сервера
+## 9. Используем пользовательский хук useAppDispatch для загрузки данных с сервера
 
 ```
 
@@ -160,7 +165,7 @@ function App(): JSX.Element {
 export default App;
 ```
 
-## 10. Используем кастомный хук useAppSelector для извлечения данных из хранилища
+## 10. Используем пользовательский хук useAppSelector для извлечения данных из хранилища
 
 Получаем массив roads для дальнейшего использования в компонентах
 
