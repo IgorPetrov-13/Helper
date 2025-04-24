@@ -1,2 +1,2 @@
 code IA
-https://www.windsurf.com/profile?response_type=token&client_id=3GUryQ7ldAeKEuD2obYnppsnmj58eP5u&redirect_uri=vscode://Codeium.codeium&state=5beb683c-5075-4bc4-87c3-a93ddcc666cc&scope=openid+profile+email&prompt=login&redirect_parameters_type=fragment
+https://www.windsurf.com/profile?response_type=token&client_id=3GUryQ7ldAeKEuD2obYnppsnmj58eP5u&redirect_uri=show-auth-token&state=619e052c-e3f8-4084-a9f1-8eb8fca8115c&scope=openid+profile+email&prompt=login&redirect_parameters_type=query
